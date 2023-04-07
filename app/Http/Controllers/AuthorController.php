@@ -32,17 +32,13 @@ class AuthorController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'fullname' => 'required|string|max:50',
             'nationality' => 'required|string|max:32',
             'description' => 'required|string|min:100',
         ]);
 
-        Author::create([
-            'fullname' => $request->fullname,
-            'nationality' => $request->nationality,
-            'description' => $request->description,
-        ]);
+        Author::create($validated);
 
         return redirect(route('authors.index'));
     }
@@ -58,17 +54,29 @@ class AuthorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Author $author)
+    public function edit(Author $author): View
     {
-        //
+        // $this->authorize('update', $author);
+
+        return view('authors.edit', compact('author'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Author $author)
+    public function update(Request $request, Author $author): RedirectResponse
     {
-        //
+        // $this->authorize('update', $author);
+
+        $validated = $request->validate([
+            'fullname' => 'required|string|max:50',
+            'nationality' => 'required|string|max:32',
+            'description' => 'required|string|min:100',
+        ]);
+
+        $author->update($validated);
+
+        return redirect(route('authors.index'));
     }
 
     /**

@@ -2,6 +2,9 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Authors list') }}
+            <small>
+                [ {{ count($authors) }} {{ __('author(s) in the database') }}. ]
+            </small>
         </h2>
     </x-slot>
 
@@ -37,9 +40,6 @@
         </form>
     </div>
 
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <p>{{ count($authors) }} {{ __('author(s) in the database') }}.</p>
-    </div>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 bg-white">
         @foreach ($authors as $author)
             <div class="p-6 flex space-x-2">
@@ -51,7 +51,24 @@
                         <div>
                             <span class="text-gray-800">{{ $author->fullname }}</span>
                             <small class="ml-2 text-sm text-gray-600">{{ $author->nationality }}</small>
+                            @unless ($author->created_at->eq($author->updated_at))
+                                <small class="text-sm text-gray-600"> &middot; {{ __('edited') }}</small>
+                            @endunless
                         </div>
+                        <x-dropdown>
+                            <x-slot name="trigger">
+                                <button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    </svg>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('authors.edit', $author)">
+                                    {{ __('Edit') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
                     </div>
                     <p class="mt-4 text-lg text-gray-900">{{ $author->description }}</p>
                 </div>
