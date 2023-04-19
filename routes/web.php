@@ -16,6 +16,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('frontend.index');
+})->name('index');
+
+Route::get('/projects', function () {
+    return view('frontend.projects');
+})->name('projects');
+
+Route::get('/resume', function () {
+    return view('frontend.resume');
+})->name('resume');
+
+Route::get('/contact', function () {
+    return view('frontend.contact');
+})->name('contact');
+
+
+
+Route::get('/test', function () {
     return view('welcome');
 });
 
@@ -24,7 +42,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('authors', AuthorController::class)
-    ->only(['index', 'store', 'edit', 'update'])
+    ->only(['index', 'store', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
